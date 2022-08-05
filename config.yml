@@ -1,0 +1,4 @@
+output_dir: .
+project_name: kedro-101
+repo_name: _101 #the main project folder
+python_package: core #folder inside src
