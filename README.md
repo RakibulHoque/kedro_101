@@ -2,9 +2,8 @@
 
 ## Setup
 ```
-source .env
-bash setup.sh
-export ROOT_PROJECT_DIR=$ROOT_PROJECT_DIR
-export GCLOUD_SERVICE_JSON=$GCLOUD_SERVICE_JSON
-
+source init.sh && cd $TOOL_PROJECT_DIR
 ```
+
+## Run Kedro
+kedro run

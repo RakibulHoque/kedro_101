@@ -13,3 +13,7 @@ pip install extra_geo_packages\Fiona-1.8.21-cp39-cp39-win_amd64.whl
 ```
 pip install geopandas
 ```
+
+## How to Run
+### 00
+cd _kedro && kedro run
