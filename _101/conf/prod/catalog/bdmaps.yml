@@ -1,0 +1,45 @@
+test:
+  type: pandas.CSVDataSet
+  filepath: s3://your_bucket/test.csv # assume `test.csv` is uploaded to the Minio server.
+  credentials: dev_minio
+
+
+gadm_bangladesh_level_00_api:
+  type: kedro.extras.datasets.api.APIDataSet
+  method: GET
+  url: https://geodata.ucdavis.edu/gadm/gadm4.1/json/gadm41_BGD_0.json.zip
+
+gadm_bangladesh_level_01_api:
+  type: kedro.extras.datasets.api.APIDataSet
+  method: GET
+  url: https://geodata.ucdavis.edu/gadm/gadm4.1/json/gadm41_BGD_1.json.zip
+
+gadm_bangladesh_level_02_api:
+  type: kedro.extras.datasets.api.APIDataSet
+  method: GET
+  url: https://geodata.ucdavis.edu/gadm/gadm4.1/json/gadm41_BGD_2.json.zip
+
+gadm_bangladesh_level_03_api:
+  type: kedro.extras.datasets.api.APIDataSet
+  method: GET
+  url: https://geodata.ucdavis.edu/gadm/gadm4.1/json/gadm41_BGD_3.json.zip
+
+gadm_bangladesh_level_04_api:
+  type: kedro.extras.datasets.api.APIDataSet
+  method: GET
+  url: https://geodata.ucdavis.edu/gadm/gadm4.1/json/gadm41_BGD_4.json.zip
+
+
+gadm_bangladesh:
+  type: PartitionedDataSet
+  path: s3://bdmaps
+  dataset:
+    type: kedro.extras.datasets.text.TextDataSet
+    credentials: prod_minio
+
+geojson_bangladesh:
+  type: PartitionedDataSet
+  path: s3://bdmaps
+  dataset:
+    type: kedro.extras.datasets.geopandas.GeoJSONDataSet
+    credentials: prod_minio

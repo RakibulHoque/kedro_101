@@ -26,14 +26,15 @@ gadm_bangladesh_level_04_api:
 
 gadm_bangladesh:
   type: PartitionedDataSet
-  path: data/01_raw/bdmaps
+  path: s3://bdmaps
   dataset:
     type: kedro.extras.datasets.text.TextDataSet
-
+    credentials: dev_minio
 
 geojson_bangladesh:
   type: PartitionedDataSet
-  path: data/01_raw/bdmaps
+  path: s3://bdmaps
   dataset:
     type: kedro.extras.datasets.geopandas.GeoJSONDataSet
+    credentials: dev_minio
     
