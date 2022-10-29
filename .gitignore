@@ -3,3 +3,4 @@ venv
 .gcloud
 logs
 .env.*
+.env
