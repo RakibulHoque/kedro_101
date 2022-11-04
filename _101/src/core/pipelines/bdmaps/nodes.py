@@ -1,10 +1,9 @@
 import json
-
-
 import zipfile
 from io import BytesIO
 
-def extract_zipped_data(*args):
+
+def extract_zipped_data_to_file(*args):
     datamap = {}
     for r in args:
         z = zipfile.ZipFile(BytesIO(r.content))
