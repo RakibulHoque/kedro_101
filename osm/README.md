@@ -11,6 +11,11 @@ https://download.geofabrik.de/asia/bangladesh.html
 
 ## Osmosis
 https://github.com/openstreetmap/osmosis/releases/download/0.48.3/osmosis-0.48.3.zip
+## Osmconvert
+https://disk.yandex.ru/d/Vnwc4kut3LCBFm
+## Osmfilter
+http://m.m.i24.cc/osmfilter.exe
+
 
 ### steps:
 - download zipfile
@@ -31,4 +36,12 @@ osm/osmtools/osmosis/bin/osmosis.bat --rbf osm/data/bangladesh-latest-allnodes.o
 #### Converting POIs pbf to csv:
 ```
 osm/osmtools/osmconvert.exe --max-objects=500000000 poinode.osm.pbf -o=osm/data/poinode.csv --csv="@id @lon @lat name addr:city addr:postcode addr:district amenity place addr:street addr:country addr:housenumber building:material name:en addr:union addr:ward addr:province addr:division addr:subdistrict addr:state name:bn addr:suburb addr:word addr:neighbourhood addr:place alt_name addr:housename" --csv-headline --csv-separator=,
+```
+### Miscellaneous
+#### Extract Boundary
+```
+osm/osmtools/osmconvert.exe _101/data/01_raw/bdpoi/pbf/bangladesh-latest.osm.pbf -o=osm/data/bangladesh-latest.o5m
+```
+```
+osm/osmtools/osmfilter.exe osm/data/bangladesh-latest.o5m --keep="natural=sea =coastline admin_level=1 =2 =3 =4 place=ocean =sea" --drop-tags="source= fixme= created_by=" > osm/data/map_lowres.osm
 ```
