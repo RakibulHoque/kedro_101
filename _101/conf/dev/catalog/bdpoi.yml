@@ -58,3 +58,10 @@ bangladesh_pois_csv@cloud:
     sep: ","
     encoding: utf8
     encoding_errors: replace
+
+bangladesh_pois_json@local:
+  type: pandas.JSONDataSet
+  filepath: data/01_raw/bdpoi/json/poi.json.gz
+  load_args:
+    lines: True
+    chunksize: 1000
