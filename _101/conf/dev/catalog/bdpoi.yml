@@ -41,3 +41,20 @@ bangladesh_pbf_allpois:
   fs_args:
     open_args_save:
       mode: 'wb'
+
+bangladesh_pois_csv@local:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/bdpoi/csv/poinode.csv
+  load_args:
+    sep: ","
+    encoding: utf8
+    encoding_errors: replace
+
+bangladesh_pois_csv@cloud:
+  type: pandas.CSVDataSet
+  filepath: s3://bdmaps/csv/poinode_cloud.csv
+  credentials: dev_minio
+  load_args:
+    sep: ","
+    encoding: utf8
+    encoding_errors: replace

@@ -5,8 +5,8 @@ from io import BytesIO
 from pathlib import Path
 
 
-def execute_osmconvert_all_elements_to_nodes(osmconvert_exe, bangladesh_pbf):
-    output_savepath = os.path.join(os.path.dirname(bangladesh_pbf), "bangladesh-latest-allnodes.osm.pbf").replace("\\", "/")
+def execute_osmconvert_all_elements_to_nodes(osmconvert_exe, bangladesh_pbf, bangladesh_pbf_allnodes_filename):
+    output_savepath = os.path.join(os.path.dirname(bangladesh_pbf), bangladesh_pbf_allnodes_filename).replace("\\", "/")
     cmd = f"{osmconvert_exe} --all-to-nodes --max-objects=500000000 {bangladesh_pbf} -o={output_savepath}"
     print(cmd)
     subprocess.run(cmd)
@@ -19,11 +19,11 @@ def extract_zipped_data_to_folder(response, osmosis_path):
     return {"status": True}
 
 
-def execute_osmosis_node_to_poi(osmosis_libpath, bangladesh_pbf_allnodes, *args):    
+def execute_osmosis_node_to_poi(osmosis_libpath, bangladesh_pbf_allnodes, bangladesh_pbf_allpois_filename,*args):    
 
     osmosis_exe = os.getcwd().replace("\\", "/") + "/" + osmosis_libpath + "/bin/osmosis.bat"
     bangladesh_pbf_allnodes_filepath = bangladesh_pbf_allnodes.replace("\\", "/")
-    output_savepath = os.path.join(os.path.dirname(bangladesh_pbf_allnodes), "poinode.osm.pbf").replace("\\", "/")
+    output_savepath = os.path.join(os.path.dirname(bangladesh_pbf_allnodes), bangladesh_pbf_allpois_filename).replace("\\", "/")
 
     filter_command = " ".join((
         f"--rbf",
@@ -45,8 +45,10 @@ def execute_osmosis_node_to_poi(osmosis_libpath, bangladesh_pbf_allnodes, *args)
     return dict(status=True)
 
 
-def execute_osmconvert_poi_to_csv(osmconvert_exe, bangladesh_pbf_allpois, *args):
-    output_savepath = os.path.join(os.path.dirname(bangladesh_pbf_allpois), "poinode.csv").replace("\\", "/")
+def execute_osmconvert_poi_to_csv(osmconvert_exe, bangladesh_pbf_allpois, bangladesh_pois_csv_filename, *args):
+    output_savepath = os.path.join(os.path.dirname(bangladesh_pbf_allpois), "../csv", bangladesh_pois_csv_filename).replace("\\", "/")
+    if not os.path.exists(os.path.dirname(output_savepath)):
+        os.makedirs(os.path.dirname(output_savepath))
     cmd = " ".join((
         f'{osmconvert_exe} {bangladesh_pbf_allpois}',
         f'-o={output_savepath}',

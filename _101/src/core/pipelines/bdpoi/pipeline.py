@@ -24,8 +24,12 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=execute_osmconvert_all_elements_to_nodes,
-                inputs=["osmconvert_exe", "bangladesh_pbf"],
-                outputs="dummy_execute_osmconvert.element_to_node.confirmation",
+                inputs=[
+                    "osmconvert_exe", 
+                    "bangladesh_pbf",
+                    "params:bangladesh_pbf_allnodes_filename"
+                ],
+                outputs="dummy_execute_osmconvert.bangladesh_pbf_allnodes.confirmation",
                 name="execute_osmconvert.element_to_node_conversion",
             )
         ]
@@ -38,18 +42,19 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "osmosis_download_api@windows", 
                     "params:osmosis_libpath"
                 ],
-                outputs="dummy_url_library_extraction.osmosis.confirmation",
+                outputs="dummy_url_library_extraction.osmosis_libpath.confirmation",
                 name="url_download.osmosis_library",
             ),
             node(
                 func=execute_osmosis_node_to_poi,
                 inputs=[
                     "params:osmosis_libpath", 
-                    "bangladesh_pbf_allnodes", 
-                    "dummy_url_library_extraction.osmosis.confirmation", 
-                    "dummy_execute_osmconvert.element_to_node.confirmation"
+                    "bangladesh_pbf_allnodes",
+                    "params:bangladesh_pbf_allpois_filename",
+                    "dummy_url_library_extraction.osmosis_libpath.confirmation", 
+                    "dummy_execute_osmconvert.bangladesh_pbf_allnodes.confirmation"
                 ],
-                outputs="dummy_execute_osmosis.node_filtering.confirmation",
+                outputs="dummy_execute_osmosis.bangladesh_pbf_allpois.confirmation",
                 name="execute_osmosis.node_filter",
             ),
             node(
@@ -57,10 +62,17 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=[
                     "osmconvert_exe", 
                     "bangladesh_pbf_allpois", 
-                    # "dummy_execute_osmosis.node_filtering.confirmation"
+                    "params:bangladesh_pois_csv_filename",
+                    "dummy_execute_osmosis.bangladesh_pbf_allpois.confirmation"
                 ],
-                outputs="dummy_execute_osmconvert.filtered_nodes_to_csv.confirmation",
+                outputs="dummy_execute_osmconvert.bangladesh_pois_csv.confirmation",
                 name="execute_osmconvert.csv_conversion",
+            ),
+            node(
+                func=lambda x, _: x,
+                inputs=["bangladesh_pois_csv@local", "dummy_execute_osmconvert.bangladesh_pois_csv.confirmation"],
+                outputs="bangladesh_pois_csv@cloud",
+                name="upload_to_cloud.bangladesh_pois_csv",
             ),
         ]
     )
