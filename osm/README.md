@@ -5,6 +5,7 @@ https://help.openstreetmap.org/questions/40080/osmconvert-csv-and-relations-ways
 https://stackoverflow.com/questions/36054926/osmosis-get-all-nodes-ways-relations-with-the-same-tags
 https://manpages.ubuntu.com/manpages/focal/man1/osmconvert.1.html
 https://github.com/openstreetmap/osmosis/blob/main/doc/detailed-usage.adoc#used-way-uw
+https://github.com/kiselev-dv/gazetteer/tree/develop/Gazetteer
 
 ## Geofabrik
 https://download.geofabrik.de/asia/bangladesh.html
@@ -15,7 +16,8 @@ https://github.com/openstreetmap/osmosis/releases/download/0.48.3/osmosis-0.48.3
 https://disk.yandex.ru/d/Vnwc4kut3LCBFm
 ## Osmfilter
 http://m.m.i24.cc/osmfilter.exe
-
+## Gazetteer
+https://github.com/kiselev-dv/gazetteer/releases/download/2.0/Gazetteer.jar
 
 ### steps:
 - download zipfile
@@ -38,10 +40,20 @@ osm/osmtools/osmosis/bin/osmosis.bat --rbf osm/data/bangladesh-latest-allnodes.o
 osm/osmtools/osmconvert.exe --max-objects=500000000 poinode.osm.pbf -o=osm/data/poinode.csv --csv="@id @lon @lat name addr:city addr:postcode addr:district amenity place addr:street addr:country addr:housenumber building:material name:en addr:union addr:ward addr:province addr:division addr:subdistrict addr:state name:bn addr:suburb addr:word addr:neighbourhood addr:place alt_name addr:housename" --csv-headline --csv-separator=,
 ```
 ### Miscellaneous
+#### Type Conversion
+osm/osmtools/osmconvert.exe _101/data/01_raw/bdpoi/pbf/bangladesh-latest.osm.pbf > osm/data/bangladesh-latest.osm
 #### Extract Boundary
 ```
 osm/osmtools/osmconvert.exe _101/data/01_raw/bdpoi/pbf/bangladesh-latest.osm.pbf -o=osm/data/bangladesh-latest.o5m
 ```
 ```
 osm/osmtools/osmfilter.exe osm/data/bangladesh-latest.o5m --keep="natural=sea =coastline admin_level=1 =2 =3 =4 place=ocean =sea" --drop-tags="source= fixme= created_by=" > osm/data/map_lowres.osm
+```
+
+### Java Tool
+Special thanks to this library: https://kiselev-dv.github.io/gazetteer/index.html
+```
+java -jar osm/osmtools/gazetteer.jar split osm/data/bangladesh-latest.osm
+java -jar osm/osmtools/gazetteer.jar slice
+java -jar osm/osmtools/gazetteer.jar join --handlers out-gazetteer osm/data/javaoutput.json.gz
 ```
