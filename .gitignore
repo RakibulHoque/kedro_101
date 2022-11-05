@@ -3,3 +3,6 @@ venv
 .gcloud
 logs
 .env.*
+.env
+*/data
+data
