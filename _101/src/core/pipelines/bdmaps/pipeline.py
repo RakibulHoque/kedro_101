@@ -20,7 +20,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             node(
                 func=newline_delimiter_json_builder,
                 inputs=[
-                    "geojson_bangladesh",
+                    "geojson_bangladesh@nljson",
                     "dummy_url_data_extraction.gadm.confirmation"
                 ],
                 outputs="gadm_nl_bangladesh",

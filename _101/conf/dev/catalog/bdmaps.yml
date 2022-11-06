@@ -40,9 +40,17 @@ geojson_bangladesh:
     # type: kedro.extras.datasets.geopandas.GeoJSONDataSet
     type: kedro.extras.datasets.json.JSONDataSet
     
-gadm_nl_bangladesh:
+gadm_nl_bangladesh@nljson:
   type: PartitionedDataSet
   path: s3://bdmaps/nl_delimited_json
   credentials: dev_minio
   dataset:
     type: kedro.extras.datasets.text.TextDataSet
+
+geojson_bangladesh@gpd:
+  type: PartitionedDataSet
+  path: s3://bdmaps/json
+  credentials: dev_minio
+  dataset:
+    # type: kedro.extras.datasets.geopandas.GeoJSONDataSet
+    type: kedro.extras.datasets.geopandas.GeoJSONDataSet
