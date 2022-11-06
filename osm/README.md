@@ -53,7 +53,10 @@ osm/osmtools/osmfilter.exe osm/data/bangladesh-latest.o5m --keep="natural=sea =c
 ### Java Tool
 Special thanks to this library: https://kiselev-dv.github.io/gazetteer/index.html
 ```
-java -jar osm/osmtools/gazetteer.jar split osm/data/bangladesh-latest.osm
+java -jar osm/osmtools/gazetteer.jar split _101/data/01_raw/bdpoi/json/bangladesh-latest.osm
 java -jar osm/osmtools/gazetteer.jar slice
 java -jar osm/osmtools/gazetteer.jar join --handlers out-gazetteer osm/data/javaoutput.json.gz
 ```
+
+java -jar osm/osmtools/gazetteer.jar slice boundaries places highways
+java -jar osm/osmtools/gazetteer.jar join --handlers out-gazetteer osm/data/file.json.gz

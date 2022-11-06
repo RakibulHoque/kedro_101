@@ -31,6 +31,6 @@ def create_pipeline(**kwargs) -> Pipeline:
             )
         ]
     )
-    # return h3_data_extraction_pipeline + poi_h3_data_mapping_pipeline
-    return  poi_h3_data_mapping_pipeline
+    return h3_data_extraction_pipeline + poi_h3_data_mapping_pipeline
+    # return  poi_h3_data_mapping_pipeline
 

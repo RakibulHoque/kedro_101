@@ -106,7 +106,7 @@ def pois_to_h3_mapping(pois, geoh3mapping, h3_level, savedir):
     
     separator = GLOBAL_SEPARATOR
     for i, poibatch in enumerate(pois):
-        print(f"{i} out of 1740")
+        print(f"{i} out of 26")
         counter = counter + i
         
         # if i < 26:
