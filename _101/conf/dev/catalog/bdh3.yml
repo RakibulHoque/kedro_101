@@ -1,0 +1,35 @@
+# PIPELINE DEPS: 
+# bangladesh_pois_json@local (pipeline=bdpoi)
+# geojson_bangladesh_gpd (pipeline=bdmaps)
+
+geojson_bangladesh_h3_level9:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/bdh3/csv/geojson_bangladesh_h3_level9.csv
+
+district_poi:
+  type: PartitionedDataSet
+  path: data/02_intermediate/bdh3/csv/poi
+  dataset:
+    type: kedro.extras.datasets.pandas.CSVDataSet
+
+en_phrases:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/bdh3/csv/en_phrases_to_translate.csv
+  
+bn_phrases:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/bdh3/csv/bn_phrases_to_translate.csv
+
+translated_bn2en_data:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/bdh3/csv/translated_bn2en_data.csv
+
+translated_en2bn_data:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/bdh3/csv/translated_en2bn_data.csv
+
+district_poi_with_bn:
+  type: PartitionedDataSet
+  path: data/02_intermediate/bdh3/csv/poi_bn
+  dataset:
+    type: kedro.extras.datasets.pandas.CSVDataSet

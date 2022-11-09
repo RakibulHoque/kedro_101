@@ -1,0 +1,4 @@
+h3_level_for_joining: 9
+district_level_poi_savedir: data/02_intermediate/bdh3/csv/poi
+tmp_translation_bn2en_saving_filepath: data/02_intermediate/bdh3/csv/tmp/infinite_bn2en.csv
+tmp_translation_en2bn_saving_filepath: data/02_intermediate/bdh3/csv/tmp/infinite_en2bn.csv
