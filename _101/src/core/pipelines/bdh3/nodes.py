@@ -4,9 +4,12 @@ import os
 import regex
 import numpy as np
 import geopandas as gpd
+import pandas as pd
 import h3pandas
 import h3
 import tqdm
+import googletrans
+from googletrans import Translator
 
 GLOBAL_SEPARATOR = ", "
 
@@ -151,3 +154,54 @@ def pois_to_h3_mapping(pois, geoh3mapping, h3_level, savedir):
             continue
 
     return dict(status=True)
+
+
+def get_translation_required_words(district_poi_dict, *args):
+    en_set = set()
+    bn_set = set()
+    for key, value in district_poi_dict.items():
+        district_poi_data = value()
+        en_set = en_set.union(set(district_poi_data[~district_poi_data["need_translate_en2bn"].isna()]["need_translate_en2bn"].unique().tolist()))
+        bn_set = bn_set.union(set(district_poi_data[~district_poi_data["need_translate_bn2en"].isna()]["need_translate_bn2en"].unique().tolist()))
+    return pd.DataFrame(data=list(en_set), columns=["en_phrases"]), pd.DataFrame(data=list(bn_set), columns=["bn_phrases"])
+
+
+
+def run_infinitely(data: pd.DataFrame, tmp_save_path="infinite.csv", source_lan=None, translated_to=None):
+    if not os.path.exists(path:=os.path.dirname(tmp_save_path)):
+        os.makedirs(path)
+    data_len = len(data[f"{source_lan}_phrases"])
+    translator = Translator()
+    base_collected_data = []
+    translated_data = None
+    counter = 0
+    while True:
+        if counter >= data_len - 1:
+            break
+        translated_words = {}
+        try:
+            for i, word_to_translate in enumerate(data[f"{source_lan}_phrases"]):
+                if i <= counter:
+                    continue
+                translated_words[word_to_translate] = translator.translate(word_to_translate, src=source_lan, dest=translated_to)
+                print(f"completed {i} out of {data_len}, more time required: {(data_len-i)/1800:.2f} hrs")
+        except KeyboardInterrupt:
+            for word_to_translate, translated_obj in translated_words.items():
+                base_collected_data.append((word_to_translate, translated_obj.text))
+                translated_data = pd.DataFrame(data=base_collected_data, columns=[f"{source_lan}_phrases", f"{translated_to}_translated"])
+            translated_data.to_csv(tmp_save_path)
+            break
+        except Exception as e:
+            for word_to_translate, translated_obj in translated_words.items():
+                base_collected_data.append((word_to_translate, translated_obj.text))
+                translated_data = pd.DataFrame(data=base_collected_data, columns=[f"{source_lan}_phrases", f"{translated_to}_translated"])
+            translated_data.to_csv(tmp_save_path)
+        else:
+            for word_to_translate, translated_obj in translated_words.items():
+                base_collected_data.append((word_to_translate, translated_obj.text))
+                translated_data = pd.DataFrame(data=base_collected_data, columns=[f"{source_lan}_phrases", f"{translated_to}_translated"])
+        finally:
+            counter = i
+    translated_data.to_csv(tmp_save_path) 
+    return translated_data
+

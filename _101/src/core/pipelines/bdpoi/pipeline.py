@@ -133,6 +133,9 @@ def create_pipeline(**kwargs) -> Pipeline:
             )
         ]
     )
+    # return poi_osmconvert_download_pipeline
+    # return poi_osmosis_filter_pipeline
+    # return poi_gazetteer_filter_pipeline
     # return poi_osmconvert_download_pipeline + poi_osmosis_filter_pipeline
     return poi_osmconvert_download_pipeline + poi_gazetteer_filter_pipeline
 

@@ -6,7 +6,8 @@ https://stackoverflow.com/questions/36054926/osmosis-get-all-nodes-ways-relation
 https://manpages.ubuntu.com/manpages/focal/man1/osmconvert.1.html
 https://github.com/openstreetmap/osmosis/blob/main/doc/detailed-usage.adoc#used-way-uw
 https://github.com/kiselev-dv/gazetteer/tree/develop/Gazetteer
-
+https://gis.stackexchange.com/questions/336667/extract-custom-shape-area-from-openstreetmap-pbf
+http://overpass-turbo.eu/
 ## Geofabrik
 https://download.geofabrik.de/asia/bangladesh.html
 
@@ -39,6 +40,8 @@ osm/osmtools/osmosis/bin/osmosis.bat --rbf osm/data/bangladesh-latest-allnodes.o
 ```
 osm/osmtools/osmconvert.exe --max-objects=500000000 poinode.osm.pbf -o=osm/data/poinode.csv --csv="@id @lon @lat name addr:city addr:postcode addr:district amenity place addr:street addr:country addr:housenumber building:material name:en addr:union addr:ward addr:province addr:division addr:subdistrict addr:state name:bn addr:suburb addr:word addr:neighbourhood addr:place alt_name addr:housename" --csv-headline --csv-separator=,
 ```
+#### Filtering on Ways:
+osm/osmtools/osmosis/bin/osmosis.bat --rbf _101/data/01_raw/bdpoi/pbf/bangladesh-latest.osm.pbf --complete-ways --tf accept-ways addr:housenumber=* addr:housename=* addr:flat=* addr:flats=* addr:unit=* addr:conscriptionnumber=* addr:streetnumber=* addr:street=* addr:place=* addr:postbox=* addr:postcode=* addr:city=* addr=* addr:full=* addr:town=* addr:quarter=* addr:suburb=* addr:subdistrict=* addr:district=* addr:province=* addr:region=* addr:state=* addr:county=* addr:country=* amenity=* source:name=* name=* name:en=* name:bn=* name:left=* name:right=* int_name=* int_name:en=* int_name:bn=* loc_name=* loc_name:en=* loc_name:bn=* nat_name=* nat_name:en=* nat_name:bn=* official_name=* official_name:en=* official_name:bn=* old_name=* reg_name=* reg_name:en=* reg_name:bn=* short_name=* short_name:en=* short_name:bn=* sorting_name=* alt_name=* --tf reject-nodes --tf reject-relations --wx osm/data/poiway.osm.pbf
 ### Miscellaneous
 #### Type Conversion
 osm/osmtools/osmconvert.exe _101/data/01_raw/bdpoi/pbf/bangladesh-latest.osm.pbf > osm/data/bangladesh-latest.osm
