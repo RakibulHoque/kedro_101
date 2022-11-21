@@ -12,6 +12,14 @@ district_poi:
   dataset:
     type: kedro.extras.datasets.pandas.CSVDataSet
 
+archive_en2bn_translated:
+  type: pandas.CSVDataSet
+  filepath: data/03_primary/csv/en2bn_translated.csv
+
+archive_bn2en_translated:
+  type: pandas.CSVDataSet
+  filepath: data/03_primary/csv/bn2en_translated.csv
+
 en_phrases:
   type: pandas.CSVDataSet
   filepath: data/02_intermediate/bdh3/csv/en_phrases_to_translate.csv
