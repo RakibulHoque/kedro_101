@@ -1,21 +1,14 @@
-import hashlib
 import os
 
 import regex
 import numpy as np
-import geopandas as gpd
 import pandas as pd
-import h3pandas
 import h3
-import tqdm
-import googletrans
 from googletrans import Translator
+from .utils import md5hash, isEnglish, pdCorrectGibbarish, enbn_from_string, enbn_from_dictionary_parts
+
 
 GLOBAL_SEPARATOR = ", "
-
-#utils
-def md5hash(s: str): 
-    return hashlib.md5(s.encode('utf-8')).hexdigest()
 
 
 def convert_gadm_level_to_h3(all_geojson_bangladesh, h3_level=9, file_to_read='gadm41_BGD_4.json'):
@@ -31,34 +24,6 @@ def convert_gadm_level_to_h3(all_geojson_bangladesh, h3_level=9, file_to_read='g
     h3_data.rename(columns={"h3_polyfill": "h3level9"}, inplace=True)
     h3_data = h3_data.explode("h3level9")
     return h3_data
-
-#utils
-def enbn_from_name(name):
-    enlist = None
-    bnlist = None
-    name_translate_en2bn = None
-    name_translate_bn2en = None
-    if isinstance(name, str):
-        extracted_bn_from_name = []
-        extracted_en_from_name = []
-        words = name.split(" ")
-        for word in words:
-            if bool(regex.fullmatch(r'\P{L}*\p{Bengali}+(?:\P{L}+\p{Bengali}+)*\P{L}*', word)):
-                extracted_bn_from_name.append(word)
-            else:
-                extracted_en_from_name.append(word)
-        if extracted_en_from_name: 
-            enlist = " ".join(extracted_en_from_name)
-        if extracted_bn_from_name: 
-            bnlist = " ".join(extracted_bn_from_name)
-        if extracted_en_from_name and not extracted_bn_from_name:
-            name_translate_en2bn = " ".join(extracted_en_from_name)
-        if not extracted_en_from_name and extracted_bn_from_name:
-            name_translate_bn2en = " ".join(extracted_bn_from_name)
-    return enlist, bnlist, name_translate_en2bn, name_translate_bn2en
-
-#utils
-def enbn_from_parts(addr_dictionary):
     separator = GLOBAL_SEPARATOR
     enlist = []
     bnlist = []
@@ -77,8 +42,11 @@ def enbn_from_parts(addr_dictionary):
                     for word in words:
                         if bool(regex.fullmatch(r'\P{L}*\p{Bengali}+(?:\P{L}+\p{Bengali}+)*\P{L}*', word)):
                             extracted_bn_from_name.append(word)
-                        else:
+                        elif bool(regex.fullmatch(r'\P{L}*\p{Bengali}+(?:\P{L}+\p{Bengali}+)*\P{L}*', word.encode("cp1252", "ignore").decode("utf-8", "ignore"))):
+                            extracted_bn_from_name.append(word)
+                        elif isEnglish(word):
                             extracted_en_from_name.append(word)
+                        
                     if extracted_en_from_name: enlist.append(" ".join(extracted_en_from_name))
                     if extracted_bn_from_name: bnlist.append(" ".join(extracted_bn_from_name))
                     if extracted_en_from_name and not extracted_bn_from_name:
@@ -90,7 +58,11 @@ def enbn_from_parts(addr_dictionary):
                 if tag == "name:en":
                     enlist.append(value)
                 if tag == "name:bn":
-                    bnlist.append(value)
+                    words = value.split(" ")
+                    if words and bool(regex.fullmatch(r'\P{L}*\p{Bengali}+(?:\P{L}+\p{Bengali}+)*\P{L}*', words[0])):
+                        bnlist.append(value)
+                    else: 
+                        bnlist.append(value.encode("cp1252", "ignore").decode("utf-8", "ignore"))
         else:
             return np.nan, np.nan, name_translate_en2bn, name_translate_bn2en
     enlist = list(dict.fromkeys(enlist))    
@@ -118,10 +90,26 @@ def pois_to_h3_mapping(pois, geoh3mapping, h3_level, savedir):
             poibatch["h3level9"] = poibatch["center_point"].apply(lambda x: h3.geo_to_h3(lat=x.get('lat'), lng=x.get('lon'), resolution=h3_level) if isinstance(x, dict) else None)
             poibatch["lat"] = poibatch["center_point"].apply(lambda x: x.get('lat') if isinstance(x, dict) else None)
             poibatch["lon"] = poibatch["center_point"].apply(lambda x: x.get('lon') if isinstance(x, dict) else None)
+
+            poibatch["name"] = poibatch["name"].apply(pdCorrectGibbarish)
+            if "alt_names" in poibatch.columns:
+                poibatch["alt_names"] = poibatch["alt_names"].apply(pdCorrectGibbarish)
+            if "local_admin_name" in poibatch.columns:
+                poibatch["local_admin_name"] = poibatch["local_admin_name"].apply(pdCorrectGibbarish)
+            poibatch["admin0_name"] = poibatch["admin0_name"].apply(pdCorrectGibbarish)
+            poibatch["admin2_name"] = poibatch["admin2_name"].apply(pdCorrectGibbarish)
+            poibatch["addr_level"] = poibatch["addr_level"].apply(pdCorrectGibbarish)
+            if "poi_addr_match" in poibatch.columns:
+                poibatch["poi_addr_match"] = poibatch["poi_addr_match"].apply(pdCorrectGibbarish)
+            if "poi_class" in poibatch.columns:    
+                poibatch["poi_class"] = poibatch["poi_class"].apply(pdCorrectGibbarish)
+            if "poi_keywords" in poibatch.columns: 
+                poibatch["poi_keywords"] = poibatch["poi_keywords"].apply(pdCorrectGibbarish)
+
             poibatch["name_en_short"], poibatch["name_bn_short"], poibatch["need_translate_en2bn_short"], poibatch["need_translate_bn2en_short"] \
-                    = zip(*poibatch["name"].apply(lambda x: enbn_from_name(x)))
+                    = zip(*poibatch["name"].apply(lambda x: enbn_from_string(x)))
             poibatch["name_en_extension"], poibatch["name_bn_extension"], poibatch["need_translate_en2bn_extension"], poibatch["need_translate_bn2en_extension"] \
-                = zip(*poibatch["address"].apply(lambda x: enbn_from_parts(x)))
+                = zip(*poibatch["address"].apply(lambda x: enbn_from_dictionary_parts(x)))
 
             poibatch["name_en"] = (poibatch["name_en_short"].fillna("") + separator + poibatch["name_en_extension"].fillna("")).str.lstrip(separator).fillna('')
             poibatch["name_bn"] = (poibatch["name_bn_short"].fillna("") + separator + poibatch["name_bn_extension"].fillna("")).str.lstrip(separator).fillna('')
@@ -133,6 +121,11 @@ def pois_to_h3_mapping(pois, geoh3mapping, h3_level, savedir):
             poibatch["need_translate_en2bn"] = poibatch["need_translate_en2bn"].str.split(separator).apply(lambda x: separator.join(list(dict.fromkeys(x))))
             poibatch["need_translate_bn2en"] = poibatch["need_translate_bn2en"].str.split(separator).apply(lambda x: separator.join(list(dict.fromkeys(x))))
             
+            poibatch["name_en"] = poibatch["name_en"].apply(pdCorrectGibbarish)
+            poibatch["name_bn"] = poibatch["name_bn"].apply(pdCorrectGibbarish)
+            poibatch["need_translate_en2bn"] = poibatch["need_translate_en2bn"].apply(pdCorrectGibbarish)
+            poibatch["need_translate_bn2en"] = poibatch["need_translate_bn2en"].apply(pdCorrectGibbarish)
+
             found_columns = set(poibatch.columns)
             missing_columns = set(poi_columns).union(found_columns) - found_columns
             if missing_columns:
@@ -154,6 +147,13 @@ def pois_to_h3_mapping(pois, geoh3mapping, h3_level, savedir):
             continue
 
     return dict(status=True)
+
+
+def get_translation_from_archive_words(district_poi_dict, archive_en2bn, archive_bn2en):
+    # for key, value in district_poi_dict.items():
+    #     district_poi_data = value()
+    pass
+        
 
 
 def get_translation_required_words(district_poi_dict, *args):

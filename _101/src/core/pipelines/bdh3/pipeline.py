@@ -3,6 +3,7 @@ from kedro.pipeline import Pipeline, node, pipeline
 from .nodes import (
     convert_gadm_level_to_h3, 
     pois_to_h3_mapping, 
+    get_translation_from_archive_words,
     get_translation_required_words, 
     run_infinitely
 )
@@ -34,6 +35,17 @@ def create_pipeline(**kwargs) -> Pipeline:
                 ],
                 outputs="dummy_execute_h3mapping.district_poi.confirmation",
                 name="conversion.poi_to_h3",
+            ),
+            node(
+                func=get_translation_from_archive_words,
+                inputs=[
+                    "district_poi",
+                    "archive_en2bn_translated",
+                    "archive_bn2en_translated",
+                    "dummy_execute_h3mapping.district_poi.confirmation"
+                ],
+                outputs=["en_phrases", "bn_phrases"],
+                name="collection.required_translation",
             ),
             node(
                 func=get_translation_required_words,
