@@ -8,6 +8,8 @@ https://github.com/openstreetmap/osmosis/blob/main/doc/detailed-usage.adoc#used-
 https://github.com/kiselev-dv/gazetteer/tree/develop/Gazetteer
 https://gis.stackexchange.com/questions/336667/extract-custom-shape-area-from-openstreetmap-pbf
 http://overpass-turbo.eu/
+https://stackoverflow.com/questions/59394394/decode-string-using-utf-8-in-swift-5
+https://stackoverflow.com/questions/3942888/unicodeencodeerror-latin-1-codec-cant-encode-character
 ## Geofabrik
 https://download.geofabrik.de/asia/bangladesh.html
 
