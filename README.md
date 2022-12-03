@@ -21,3 +21,7 @@ kedro run -p <pipeline_name> # will run a specific pipeline
 ### HELPER (HOW TO REMOVE MISTAKENLY PUSHED BIG FILES)
 https://stackoverflow.com/questions/72123622/how-to-delete-all-files-1-mb-from-the-history-but-keep-them-in-the-repository
 https://github.com/newren/git-filter-repo/blob/main/INSTALL.md
+
+After refactoring, please add the remote again using
+
+`git remote add origin <url>`
