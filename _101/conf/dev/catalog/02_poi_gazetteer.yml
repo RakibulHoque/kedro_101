@@ -1,0 +1,22 @@
+# PIPELINE DEPS: 
+# bangladesh_pbf (pipeline=tooldown)
+# gazetteer_jar (pipeline=tooldown)
+# osmconvert_exe (pipeline=tooldown)
+
+# The below dataset is generated from this same pipeline
+bangladesh_osm:
+  type: core.extras.datasets.text.FOPathTextDataSet
+  filepath: data/01_raw/bdpoi/json/bangladesh-latest.osm
+  fs_args:
+    open_args_save:
+      mode: 'wb'
+
+# The below dataset is generated from this same pipeline
+gazetteer_pois_json@local:
+  type: pandas.JSONDataSet
+  filepath: data/01_raw/bdpoi/json/poi.json
+  load_args:
+    lines: True
+    chunksize: 5000
+    encoding: utf8
+    encoding_errors: ignore

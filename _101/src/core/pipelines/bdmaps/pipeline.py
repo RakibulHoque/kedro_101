@@ -14,16 +14,16 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "gadm_bangladesh_level_03_api",
                     "gadm_bangladesh_level_04_api",
                 ],
-                outputs=["gadm_bangladesh", "dummy_url_data_extraction.gadm.confirmation"],
+                outputs=["gadm_bangladesh@text", "dummy_url_data_extraction.gadm.confirmation"],
                 name="url_data_extraction.gadm",
             ),
             node(
                 func=newline_delimiter_json_builder,
                 inputs=[
-                    "geojson_bangladesh@nljson",
+                    "gadm_bangladesh@json",
                     "dummy_url_data_extraction.gadm.confirmation"
                 ],
-                outputs="gadm_nl_bangladesh",
+                outputs="gadm_nl_bangladesh@nljson",
                 name="nl_json_extraction.gadm",
             ),
             

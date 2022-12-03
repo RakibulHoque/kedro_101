@@ -1,0 +1,43 @@
+bangladesh_pbf_api:
+  type: kedro.extras.datasets.api.APIDataSet
+  method: GET
+  url: https://download.geofabrik.de/asia/bangladesh-latest.osm.pbf
+
+gazetteer_download_api:
+  type: kedro.extras.datasets.api.APIDataSet
+  method: GET
+  url: https://github.com/kiselev-dv/gazetteer/releases/download/2.0/Gazetteer.jar
+
+osmconvert_download_api@windows:
+  type: kedro.extras.datasets.api.APIDataSet
+  method: GET
+  url: https://downloader.disk.yandex.ru/disk/1fd763243238c4c1408301ce963c74221cf2b7023da88c589c5fc41104fa2465/638bce2f/uHAtufaxAc89SsMmxas8HA8wYREKfl4I93aW-sTdh3IIh8T-b8Ap8JOuZRhVbnOeBVjkfWxLSIuC5uUDQrFfqw%3D%3D?uid=0&filename=osmconvert64-0.8.8p.exe&disposition=attachment&hash=HWkpp8ylaNcQrbx9jSR7izHyLNF6PpLc%2BCL1rrkPhmg%3D&limit=0&content_type=application%2Fx-msdownload&owner_uid=86016878&fsize=311997&hid=9e3e1fb638772f127cf6b3439f583e57&media_type=executable&tknv=v2  # the actual source path: https://disk.yandex.ru/d/Vnwc4kut3LCBFm, (please go the to link-->open network from inspect-->click download-->copy and paste changed download url above)
+
+osmosis_download_api@windows:
+  type: kedro.extras.datasets.api.APIDataSet
+  method: GET
+  url: https://github.com/openstreetmap/osmosis/releases/download/0.48.3/osmosis-0.48.3.zip
+
+##############################################################################################################################################################################################
+bangladesh_pbf:
+  type: core.extras.datasets.text.FOPathTextDataSet
+  filepath: data/01_raw/bdpoi/pbf/bangladesh-latest.osm.pbf
+  fs_args:
+    open_args_save:
+      mode: 'wb'
+
+gazetteer_jar:
+  type: core.extras.datasets.text.FOPathTextDataSet
+  filepath: data/01_raw/bdpoi/json/gzetteer.jar
+  fs_args:
+    open_args_save:
+      mode: 'wb'
+
+osmconvert_exe:
+  type: core.extras.datasets.text.FOPathTextDataSet
+  filepath: data/01_raw/bdpoi/pbf/osmconvert.exe
+  fs_args:
+    open_args_save:
+      mode: 'wb'
+
+# params:osmosis_libpath (no dataset is used to save osmosis_download_api@windows output, rather osmosis_libpath is directly referred)

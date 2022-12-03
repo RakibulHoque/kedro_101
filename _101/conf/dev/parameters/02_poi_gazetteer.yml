@@ -1,0 +1,3 @@
+bangladesh_osm_filename: bangladesh-latest.osm
+gazetteer_data_storage_path: data/01_raw/bdpoi/json/gazetteer_data
+gazetteer_json_zip_filepath:  data/01_raw/bdpoi/json/poi.json.gz

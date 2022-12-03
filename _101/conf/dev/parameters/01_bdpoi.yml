@@ -1,9 +1,0 @@
-osmosis_libpath: data/01_raw/bdpoi/osmosis
-
-bangladesh_pbf_allnodes_filename: bangladesh-latest-allnodes.osm.pbf
-bangladesh_pbf_allpois_filename: poinode.osm.pbf
-bangladesh_pois_csv_filename: poinode.csv
-
-bangladesh_osm_filename: bangladesh-latest.osm
-gazetteer_data_storage_path: data/01_raw/bdpoi/json/gazetteer_data
-gazetteer_json_zip_filepath:  data/01_raw/bdpoi/json/poi.json.gz

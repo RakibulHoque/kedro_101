@@ -4,6 +4,9 @@ from io import BytesIO
 
 
 def extract_zipped_data_to_file(*args):
+    """
+    This function takes url responses from a list of args; extract and save them
+    """
     datamap = {}
     for r in args:
         z = zipfile.ZipFile(BytesIO(r.content))
@@ -14,6 +17,9 @@ def extract_zipped_data_to_file(*args):
 
 
 def newline_delimiter_json_builder(geojson_dict, *args):
+    """
+    This function plain geojson to newline delimited geojsons
+    """
     nl_geojson_dict = {}
     for key, exec_func in geojson_dict.items():
         features = exec_func()['features']

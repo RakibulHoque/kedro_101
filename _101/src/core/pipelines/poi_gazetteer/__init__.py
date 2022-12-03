@@ -1,5 +1,5 @@
 """
-This is a boilerplate pipeline 'bdpoi'
+This is a boilerplate pipeline 'poi_gazetteer'
 generated using Kedro 0.18.3
 """
 

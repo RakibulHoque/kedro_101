@@ -1,0 +1,76 @@
+# PIPELINE DEPS: 
+# bangladesh_pbf (pipeline=tooldown)
+# gazetteer_jar (pipeline=tooldown)
+# osmconvert_exe (pipeline=tooldown)
+
+# The below dataset is generated from this same pipeline: `params:bangladesh_pbf_allnodes_filename`      
+bangladesh_pbf_allnodes:
+  type: core.extras.datasets.text.FOPathTextDataSet
+  filepath: data/01_raw/bdpoi/pbf/bangladesh-latest-allnodes.osm.pbf
+  fs_args:
+    open_args_save:
+      mode: 'wb'
+
+# The below dataset is generated from this same pipeline: `params:bangladesh_pbf_allpois_filename`      
+bangladesh_pbf_allpois:
+  type: core.extras.datasets.text.FOPathTextDataSet
+  filepath: data/01_raw/bdpoi/pbf/poinode.osm.pbf
+  fs_args:
+    open_args_save:
+      mode: 'wb'
+
+# The below dataset is generated from this same pipeline: `params:bangladesh_pois_csv_filename`      
+bangladesh_pois_csv@local:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/bdpoi/csv/poinode.csv
+  load_args:
+    sep: ","
+    encoding: utf8
+    encoding_errors: replace
+
+# The below dataset is generated from this same pipeline  
+bangladesh_pois_csv@cloud:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/bdpoi/csv/poinode_cloud.csv
+  load_args:
+    sep: ","
+    encoding: utf8
+    encoding_errors: replace
+
+
+# ## We initially used this (the default)
+# bangladesh_pois_json_utf8_replace@local:
+#   type: pandas.JSONDataSet
+#   filepath: data/01_raw/bdpoi/json/poi.json
+#   load_args:
+#     lines: True
+#     chunksize: 5000
+#     encoding: utf8
+#     encoding_errors: strict
+
+# bangladesh_pois_json_utf8_replace@local:
+#   type: pandas.JSONDataSet
+#   filepath: data/01_raw/bdpoi/json/poi.json
+#   load_args:
+#     lines: True
+#     chunksize: 5000
+#     encoding: latin_1
+#     encoding_errors: strict
+
+# bangladesh_pois_json_latin_replace@local:
+#   type: pandas.JSONDataSet
+#   filepath: data/01_raw/bdpoi/json/poi.json
+#   load_args:
+#     lines: True
+#     chunksize: 5000
+#     encoding: latin_1
+#     encoding_errors: replace
+
+# bangladesh_pois_json_latin_replace@local:
+#   type: pandas.JSONDataSet
+#   filepath: data/01_raw/bdpoi/json/poi.json
+#   load_args:
+#     lines: True
+#     chunksize: 5000
+#     encoding: latin_1
+#     encoding_errors: strict

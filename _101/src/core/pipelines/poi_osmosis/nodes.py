@@ -1,8 +1,5 @@
 import os
 import subprocess
-import zipfile
-from io import BytesIO
-from pathlib import Path
 
 
 def execute_osmconvert_all_elements_to_nodes(osmconvert_exe, bangladesh_pbf, bangladesh_pbf_allnodes_filename):
@@ -11,12 +8,6 @@ def execute_osmconvert_all_elements_to_nodes(osmconvert_exe, bangladesh_pbf, ban
     print(cmd)
     subprocess.run(cmd)
     return dict(status=True)
-
-
-def extract_zipped_data_to_folder(response, osmosis_path):
-    z = zipfile.ZipFile(BytesIO(response.content))
-    z.extractall(osmosis_path)
-    return {"status": True}
 
 
 def execute_osmosis_node_to_poi(osmosis_libpath, bangladesh_pbf_allnodes, bangladesh_pbf_allpois_filename,*args):    

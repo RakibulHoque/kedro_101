@@ -4,6 +4,7 @@ import regex
 import numpy as np
 import pandas as pd
 import h3
+import h3pandas # must be imported
 from googletrans import Translator
 from .utils import md5hash, isEnglish, pdCorrectGibbarish, enbn_from_string, enbn_from_dictionary_parts
 
@@ -149,7 +150,7 @@ def pois_to_h3_mapping(pois, geoh3mapping, h3_level, savedir):
     return dict(status=True)
 
 
-def get_translation_from_archive_words(district_poi_dict, archive_en2bn, archive_bn2en):
+def get_translation_from_archive_words(district_poi_dict, archive_en2bn, archive_bn2en, *args):
     # for key, value in district_poi_dict.items():
     #     district_poi_data = value()
     pass

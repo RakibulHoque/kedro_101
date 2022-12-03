@@ -1,6 +1,7 @@
-# Pipeline bdmaps
+# Pipeline poi_osmosis
 
-This pipeline aims to provide geojson maps for bangladesh.
+> *Note:* This is a `README.md` boilerplate generated using `Kedro 0.18.3`.
+
 ## Overview
 
 <!---

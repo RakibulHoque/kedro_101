@@ -24,33 +24,26 @@ gadm_bangladesh_level_04_api:
   url: https://geodata.ucdavis.edu/gadm/gadm4.1/json/gadm41_BGD_4.json.zip
 
 
-gadm_bangladesh:
+gadm_bangladesh@text:
   type: PartitionedDataSet
-  path: s3://bdmaps/json
-  credentials: dev_minio
+  path: data/01_raw/bdmaps/json
   dataset:
     type: kedro.extras.datasets.text.TextDataSet
-    
 
-geojson_bangladesh:
+gadm_bangladesh@json:
   type: PartitionedDataSet
-  path: s3://bdmaps/json
-  credentials: dev_minio
+  path: data/01_raw/bdmaps/json
   dataset:
-    # type: kedro.extras.datasets.geopandas.GeoJSONDataSet
     type: kedro.extras.datasets.json.JSONDataSet
-    
+
+gadm_bangladesh@gpd:
+  type: PartitionedDataSet
+  path: data/01_raw/bdmaps/json
+  dataset:
+    type: kedro.extras.datasets.geopandas.GeoJSONDataSet
+
 gadm_nl_bangladesh@nljson:
   type: PartitionedDataSet
-  path: s3://bdmaps/nl_delimited_json
-  credentials: dev_minio
+  path: data/01_raw/bdmaps/nl_delimited_json
   dataset:
     type: kedro.extras.datasets.text.TextDataSet
-
-geojson_bangladesh@gpd:
-  type: PartitionedDataSet
-  path: s3://bdmaps/json
-  credentials: dev_minio
-  dataset:
-    # type: kedro.extras.datasets.geopandas.GeoJSONDataSet
-    type: kedro.extras.datasets.geopandas.GeoJSONDataSet
