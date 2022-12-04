@@ -2,20 +2,24 @@
 # gazetteer_pois_json@local (pipeline=poi_osmosis)
 # gadm_bangladesh@gpd (pipeline=bdmaps)
 
+# The below dataset is generated from this same pipeline 
 geojson_bangladesh_h3_level9:
   type: pandas.CSVDataSet
   filepath: data/02_intermediate/bdh3/csv/geojson_bangladesh_h3_level9.csv
 
+# The below dataset is generated from this same pipeline `params:district_level_poi_savedir`
 district_poi:
   type: PartitionedDataSet
   path: data/02_intermediate/bdh3/csv/poi
   dataset:
     type: kedro.extras.datasets.pandas.CSVDataSet
 
+# The below dataset is generated from this same pipeline but saved previously to reduce time consumption
 archive_en2bn_translated:
   type: pandas.CSVDataSet
   filepath: data/03_primary/csv/en2bn_translated.csv
 
+# The below dataset is generated from this same pipeline but saved previously to reduce time consumption
 archive_bn2en_translated:
   type: pandas.CSVDataSet
   filepath: data/03_primary/csv/bn2en_translated.csv
