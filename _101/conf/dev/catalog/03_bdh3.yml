@@ -40,8 +40,8 @@ translated_en2bn_data:
   type: pandas.CSVDataSet
   filepath: data/02_intermediate/bdh3/csv/translated_en2bn_data.csv
 
-district_poi_with_bn:
+district_poi_with_modified_names:
   type: PartitionedDataSet
-  path: data/02_intermediate/bdh3/csv/poi_bn
+  path: data/02_intermediate/bdh3/csv/poi_modified
   dataset:
     type: kedro.extras.datasets.pandas.CSVDataSet

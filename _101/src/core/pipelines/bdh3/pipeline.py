@@ -10,6 +10,7 @@ from .nodes import (
 
 
 def create_pipeline(**kwargs) -> Pipeline:
+    # Spans the whole bangladesh using h3
     h3_spanning_pipeline = Pipeline(
         [
             node(
@@ -23,6 +24,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             )
         ]
     )
+    # Joins with POI h3 to get the zone names
     h3_joining_pipeline = Pipeline(
         [
             node(
@@ -38,6 +40,7 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
         ]
     )
+    # Translates bangla to english, english to bangla
     translation_pipeline = Pipeline(
         [
             node(
@@ -79,7 +82,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                     "archive_bn2en_translated",
                     # "dummy_execute_h3mapping.district_poi.confirmation"
                 ],
-                outputs=["en_phrases_translated", "bn_phrases_translated"],
+                outputs="district_poi_with_modified_names",
                 name="collection.required_translation_replace",
             ),
         ]

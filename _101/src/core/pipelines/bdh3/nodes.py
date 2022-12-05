@@ -151,9 +151,36 @@ def pois_to_h3_mapping(pois, geoh3mapping, h3_level, savedir):
 
 
 def get_translation_from_archive_words(district_poi_dict, archive_en2bn, archive_bn2en, *args):
-    # for key, value in district_poi_dict.items():
-    #     district_poi_data = value()
-    pass
+    separator = GLOBAL_SEPARATOR
+    district_new_poi_dict = {}    
+
+    for key, value in district_poi_dict.items():
+        district_poi_data = value()
+
+        district_poi_data = district_poi_data.merge(archive_en2bn, 
+                                                    how='left', 
+                                                    left_on="need_translate_en2bn", 
+                                                    right_on="en_phrases")
+        district_poi_data = district_poi_data.merge(archive_bn2en, 
+                                                    how='left', 
+                                                    left_on="need_translate_bn2en", 
+                                                    right_on="bn_phrases")
+
+        district_poi_data["name_bn"] = (district_poi_data["bn_translated"].fillna("").str.strip(separator)  + separator + district_poi_data["name_bn"].fillna("")).str.lstrip(separator).fillna('')
+        district_poi_data["name_bn"] = district_poi_data["name_bn"].str.split(separator).apply(lambda x: separator.join(list(dict.fromkeys(x))))
+        
+        district_poi_data["name_en"] = (district_poi_data["en_translated"].fillna("").str.strip(separator)  + separator + district_poi_data["name_en"].fillna("")).str.lstrip(separator).fillna('')
+        district_poi_data["name_en"] = district_poi_data["name_en"].str.split(separator).apply(lambda x: separator.join(list(dict.fromkeys(x))))
+
+        selected_columns = ['osm_id', 'h3level9', 'lat', 'lon', 'name', 'alt_names', 'name_en',
+                            'name_bn', 'local_admin_name', 'admin0_name', 'admin2_name', 'addr_level',
+                            'poi_addr_match', 'poi_class', 'poi_keywords', 'country', 'division',
+                            'district', 'thana', 'union', 'region_hash']
+
+        district_poi_data = district_poi_data[selected_columns]
+        district_new_poi_dict[key] = district_poi_data
+
+    return district_new_poi_dict
         
 
 
